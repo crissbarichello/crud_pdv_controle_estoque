@@ -1,0 +1,12 @@
+RewriteEngine On
+RewriteBase /CRUD-Restaurante/
+
+# Impede que as pessoas vejam suas pastas de código pelo navegador
+RewriteRule ^(app|config|views) - [F,L]
+
+# Se o que o usuário digitou NÃO for um arquivo real (como uma foto ou CSS)...
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# ...mande tudo para a pasta public/index.php passando o nome da página via GET
+RewriteRule ^(.*)$ public/index.php?url=$1 [L,QSA]
