@@ -1,6 +1,6 @@
 <?php
 
-require_once "../app/Models/EstoqueModel.php";
+require_once "../app/Models/EstoqueModels.php";
 
 class EstoqueController
 {

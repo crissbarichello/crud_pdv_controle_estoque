@@ -7,7 +7,7 @@
     <title>Sistema PDV Sul</title>
     <?php
 
-        require_once "config/database.php";
+        require_once "../config/conexao.php";
     ?>
 
 </head>
@@ -30,7 +30,7 @@ switch ($controller) {
 
     case 'produto':
 
-        require_once "app/Controllers/ProdutoController.php";
+        require_once "../app/Controllers/ProdutoController.php";
 
         $obj = new ProdutoController();
 

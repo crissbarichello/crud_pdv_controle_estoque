@@ -1,6 +1,6 @@
 <?php
 
-require_once "../app/Models/VendaModel.php";
+require_once "../app/Models/VendaModels.php";
 
 class VendaController
 {

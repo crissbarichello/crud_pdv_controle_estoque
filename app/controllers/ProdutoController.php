@@ -2,7 +2,7 @@
 
 // LOCAL: app/Controllers/ProdutoController.php
 
-require_once "../app/Models/ProdutoModel.php";
+require_once "../app/Models/ProdutoModels.php";
 
 class ProdutoController
 {
