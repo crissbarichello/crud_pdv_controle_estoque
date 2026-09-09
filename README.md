@@ -72,7 +72,7 @@ app/
 │   ├── ProdutoController.php
 │   ├── VendaController.php
 │   ├── EstoqueController.php
-│   
+│   └── BackupController.php
 │
 ├── models/
 │   ├── Produto.php
@@ -310,8 +310,27 @@ class BackupController
 
 # Versão 1.0
 
- ✅ CRUD Produtos
- ✅ Controle Estoque
- ✅ PDV Simples
- ✅ Vendas
- ✅ Backup
+- ✅ CRUD Produtos
+- ✅ Controle Estoque
+- ✅ PDV Simples
+- ✅ Vendas
+- ✅ Backup
+
+# Estrutura das Rotas
+````
+/produtos
+/produtos/novo
+/produtos/editar/{id}
+/produtos/excluir/{id}
+
+/estoque
+/estoque/movimentar
+
+/pdv
+/pdv/finalizar
+
+/vendas
+/vendas/detalhes/{id}
+
+/backup
+````

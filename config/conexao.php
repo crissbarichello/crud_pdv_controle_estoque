@@ -1,7 +1,7 @@
 <?php
 // Configurações da Despensa (Banco de Dados)
 $host = "localhost";
-$db   = "db_restaurante";
+$db   = "db_pdv";
 $user = "root";
 $pass = "";
 
