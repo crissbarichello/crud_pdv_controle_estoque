@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /CRUD-Restaurante/
+RewriteBase /pdv_mercado/
 
 # Impede que as pessoas vejam suas pastas de código pelo navegador
 RewriteRule ^(app|config|views) - [F,L]

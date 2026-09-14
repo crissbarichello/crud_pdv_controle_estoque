@@ -1,115 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+require_once "../config/conexao.php";
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema PDV Sul</title>
-    <?php
-
-        require_once "../config/conexao.php";
-    ?>
-
-</head>
-
-<body>
-    <?php
-
-    echo "<h1>Bem-vindo ao Restaurante Bona Comida</h1>";
-    //echo "<p>Aqui você encontra suas notas e frequências.</p>";
-
-    // echo "Conectando ao banco: " . $host . " user: " . $user;
-    echo "<h2>Painel Administrativo</h2>";
-
-
-    
-$controller = $_GET['controller'] ?? 'produto';
-$action     = $_GET['action'] ?? 'home';
+$controller = $_GET['controller'] ?? $_GET['modulo'] ?? 'inicio';
+$action = $_GET['action'] ?? 'home';
 
 switch ($controller) {
-
     case 'produto':
-
-        require_once "../app/Controllers/ProdutoController.php";
-
+        require_once "../app/controllers/ProdutoController.php";
         $obj = new ProdutoController();
-
-        switch ($action) {
-
-            case 'cadastrar':
-                $obj->cadastrar_produto($pdo);
-                break;
-
-            case 'editar':
-                $obj->home_produto(
-                    $pdo,
-                    $_GET['id']
-                );
-                break;
-
-            case 'atualizar':
-                $obj->atualizar_produto(
-                    $pdo,
-                    $_GET['id']
-                );
-                break;
-
-            case 'excluir':
-                $obj->excluir_produto(
-                    $pdo,
-                    $_GET['id']
-                );
-                break;
-
-            default:
-                $obj->home_produto($pdo);
+        if ($action === 'cadastrar') {
+            $obj->cadastrar_produto($pdo);
+        } elseif ($action === 'atualizar') {
+            $obj->atualizar_produto($pdo, $_GET['id']);
+        } elseif ($action === 'excluir') {
+            $obj->excluir_produto($pdo, $_GET['id']);
+        } else {
+            $obj->home_produto($pdo, $action === 'editar' ? ($_GET['id'] ?? null) : null);
         }
-
-    break;
+        break;
+    case 'estoque':
+        require_once "../app/controllers/EstoqueController.php";
+        $obj = new EstoqueController();
+        if ($action === 'movimentar') {
+            $obj->movimentar($pdo);
+        } else {
+            $obj->home_estoque($pdo);
+        }
+        break;
+    case 'pdv':
+        require_once "../app/controllers/VendaController.php";
+        $obj = new VendaController();
+        if ($action === 'finalizar') {
+            $obj->finalizar_venda($pdo);
+        } else {
+            $obj->home_pdv($pdo);
+        }
+        break;
+    case 'vendas':
+        require_once "../app/controllers/VendaController.php";
+        $obj = new VendaController();
+        $action === 'detalhes'
+            ? $obj->detalhes_venda($pdo, $_GET['id'])
+            : $obj->listar_vendas($pdo);
+        break;
+    default:
+        require_once "../app/views/home.php";
 }
-
-    echo "<h3>Lista de tabelas</h3>";
-    $tabelas = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
-    echo '<ol>';
-    foreach ($tabelas as $tabela) {
-        echo '<li><a href="./' . $tabela . '.php">' . $tabela . '</a></li>';
-    }
-    echo '</ol>';
-
-    // if (count($produtos) > 0) {
-
-    //     echo "<table border='1'>";
-    //     echo "<tr>
-    //         <th>ID</th>
-    //         <th>Nome</th>
-    //         <th>Preço</th>
-    //         <th>Categoria</th>
-    //       </tr>";
-
-    //     foreach ($produtos as $row) {
-
-    //         echo "<tr>";
-    //         echo "<td>" . $row['id'] . "</td>";
-    //         echo "<td>" . $row['nome'] . "</td>";
-    //         echo "<td>" . $row['preco'] . "</td>";
-    //         echo "<td>" . $row['categoria'] . "</td>";
-    //         echo "</tr>";
-    //     }
-
-    //     echo "</table>";
-    // } else {
-    //     echo "0 resultados";
-    // }
-
-
-    // //     // Exibe a lista completa de usuários formatada na tela
-    // echo "<pre>";
-    // print_r($usuarios);
-    // echo "</pre>";
-
-
-    //$pdo = null;
-    ?>
-</body>
-
-</html>

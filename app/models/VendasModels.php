@@ -39,9 +39,48 @@ class VendaModel
 
     public function salvarVenda($dados)
     {
+        if (empty($dados['itens']) || !in_array($dados['forma_pagamento'] ?? '', ['DINHEIRO', 'CARTAO', 'PIX'], true)) {
+            return false;
+        }
+
         $this->pdo->beginTransaction();
 
         try {
+            $itens = [];
+            $total = 0;
+
+            foreach ($dados['itens'] as $item) {
+                $produtoId = (int) ($item['produto_id'] ?? 0);
+                $quantidade = (int) ($item['quantidade'] ?? 0);
+
+                if ($produtoId < 1 || $quantidade < 1) {
+                    throw new RuntimeException('Item de venda inválido.');
+                }
+
+                $stmt = $this->pdo->prepare(
+                    'SELECT id, preco_venda, estoque
+                     FROM produtos
+                     WHERE id = ? AND ativo = 1
+                     FOR UPDATE'
+                );
+                $stmt->execute([$produtoId]);
+                $produto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if (!$produto || (int) $produto['estoque'] < $quantidade) {
+                    throw new RuntimeException('Produto sem estoque suficiente.');
+                }
+
+                $preco = (float) $produto['preco_venda'];
+                $subtotal = $preco * $quantidade;
+                $total += $subtotal;
+                $itens[] = [
+                    'produto_id' => $produtoId,
+                    'quantidade' => $quantidade,
+                    'valor_unitario' => $preco,
+                    'subtotal' => $subtotal
+                ];
+            }
+
             $sql = "
                 INSERT INTO vendas
                 (
@@ -56,13 +95,13 @@ class VendaModel
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([
-                $dados['total'],
+                $total,
                 $dados['forma_pagamento']
             ]);
 
             $vendaId = $this->pdo->lastInsertId();
 
-            foreach ($dados['itens'] as $item) {
+            foreach ($itens as $item) {
                 $sql = "
                     INSERT INTO itens_venda
                     (

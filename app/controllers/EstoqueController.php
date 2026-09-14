@@ -1,14 +1,17 @@
 <?php
 
 require_once "../app/Models/EstoqueModels.php";
+require_once "../app/Models/ProdutoModels.php";
 
 class EstoqueController
 {
     public function home_estoque($pdo)
     {
         $model = new EstoqueModel($pdo);
+        $produtoModel = new ProdutoModel($pdo);
 
         $movimentacoes = $model->buscarMovimentacoes();
+        $produtos = $produtoModel->buscarTodos();
 
         require "../app/Views/estoque/index.php";
     }

@@ -1,11 +1,13 @@
 <?php
 
-require_once "../app/Models/VendaModels.php";
+require_once "../app/Models/VendasModels.php";
+require_once "../app/Models/ProdutoModels.php";
 
 class VendaController
 {
     public function home_pdv($pdo)
     {
+        $produtos = (new ProdutoModel($pdo))->buscarTodos();
         require "../app/Views/pdv/index.php";
     }
 
@@ -13,9 +15,11 @@ class VendaController
     {
         $model = new VendaModel($pdo);
 
-        $model->salvarVenda($_POST);
+        $_POST['itens'] = json_decode($_POST['itens'] ?? '[]', true) ?: [];
+        $vendaId = $model->salvarVenda($_POST);
 
-        header("Location: index.php?modulo=pdv");
+        $status = $vendaId ? 'ok&id=' . (int) $vendaId : 'erro';
+        header("Location: index.php?controller=pdv&status={$status}");
         exit;
     }
 
