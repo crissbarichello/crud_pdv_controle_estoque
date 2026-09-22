@@ -11,7 +11,7 @@ class ProdutoModel
 
     public function buscarTodos()
     {
-        $sql = "SELECT * FROM produtos ORDER BY descricao ASC";
+        $sql = "SELECT * FROM produtos ORDER BY codigo ASC";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
