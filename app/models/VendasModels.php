@@ -37,6 +37,27 @@ class VendaModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function buscarItensVenda($vendaId)
+    {
+        $sql = "
+            SELECT
+                itens_venda.quantidade,
+                itens_venda.valor_unitario,
+                itens_venda.subtotal,
+                produtos.descricao
+            FROM itens_venda
+            INNER JOIN produtos
+                ON produtos.id = itens_venda.produto_id
+            WHERE itens_venda.venda_id = ?
+            ORDER BY itens_venda.id
+        ";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$vendaId]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function salvarVenda($dados)
     {
         if (empty($dados['itens']) || !in_array($dados['forma_pagamento'] ?? '', ['DINHEIRO', 'CARTAO', 'PIX'], true)) {

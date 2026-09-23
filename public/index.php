@@ -6,7 +6,7 @@ $action = $_GET['action'] ?? 'home';
 
 switch ($controller) {
     case 'produto':
-        require_once "../app/controllers/ProdutoController.php";
+        require_once "../app/Controllers/ProdutoController.php";
         $obj = new ProdutoController();
         if ($action === 'cadastrar') {
             $obj->cadastrar_produto($pdo);
@@ -19,7 +19,7 @@ switch ($controller) {
         }
         break;
     case 'estoque':
-        require_once "../app/controllers/EstoqueController.php";
+        require_once "../app/Controllers/EstoqueController.php";
         $obj = new EstoqueController();
         if ($action === 'movimentar') {
             $obj->movimentar($pdo);
@@ -28,7 +28,7 @@ switch ($controller) {
         }
         break;
     case 'pdv':
-        require_once "../app/controllers/VendaController.php";
+        require_once "../app/Controllers/VendaController.php";
         $obj = new VendaController();
         if ($action === 'finalizar') {
             $obj->finalizar_venda($pdo);
@@ -37,11 +37,43 @@ switch ($controller) {
         }
         break;
     case 'vendas':
-        require_once "../app/controllers/VendaController.php";
+        require_once "../app/Controllers/VendaController.php";
         $obj = new VendaController();
-        $action === 'detalhes'
-            ? $obj->detalhes_venda($pdo, $_GET['id'])
-            : $obj->listar_vendas($pdo);
+        if ($action === 'detalhes') {
+            $id = filter_input(
+                INPUT_GET,
+                'id',
+                FILTER_VALIDATE_INT
+            );
+
+            $obj->detalhes_venda($pdo, $id);
+        } else {
+            $obj->listar_vendas($pdo);
+        }
+        break;
+    case 'backup':
+        require_once "../app/Controllers/BackupController.php";
+        $obj = new BackupController();
+
+        if ($action === 'gerar') {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                http_response_code(405);
+                exit('Método não permitido.');
+            }
+
+            $obj->gerar_backup();
+        } elseif ($action === 'baixar') {
+            $obj->baixar_backup($_GET['arquivo'] ?? '');
+        } elseif ($action === 'excluir') {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                http_response_code(405);
+                exit('Método não permitido.');
+            }
+
+            $obj->excluir_backup($_POST['arquivo'] ?? '');
+        } else {
+            $obj->home_backup();
+        }
         break;
     default:
         require_once "../app/views/home.php";

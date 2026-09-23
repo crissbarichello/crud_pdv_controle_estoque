@@ -34,9 +34,20 @@ class VendaController
 
     public function detalhes_venda($pdo, $id)
     {
+        if (!is_int($id) || $id < 1) {
+            http_response_code(400);
+            exit('Venda inválida.');
+        }
+
         $model = new VendaModel($pdo);
 
         $venda = $model->buscarVenda($id);
+        if ($venda === false) {
+            http_response_code(404);
+            exit('Venda não encontrada.');
+        }
+
+        $itens = $model->buscarItensVenda($id);
 
         require "../app/Views/vendas/detalhes.php";
     }
