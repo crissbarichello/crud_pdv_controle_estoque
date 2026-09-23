@@ -14,7 +14,7 @@ return [
      *
      * Ajuste o caminho de acordo com a versão instalada.
      */
-    'mysqldump' => getenv('MYSQLDUMP_PATH') ?: 'C:/laragon/bin/mysql/mysql-8.x.x-winx64/bin/mysqldump.exe',
+    'mysqldump' => getenv('MYSQLDUMP_PATH') ?: 'C:\laragon\bin\mysql\mysql-8.4.3-winx64\bin\mysqldump.exe',
 
     'diretorio' => dirname(__DIR__) . '/storage/backups',
 

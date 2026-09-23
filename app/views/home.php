@@ -56,6 +56,12 @@
                         <h2>Histórico de vendas</h2>
                         <p>Consulte as vendas registradas e seus totais.</p>
                     </div><span class="button light">Ver vendas →</span>
+                </a><a class="module" href="index.php?controller=backup&action=home">
+                    <div class="module-icon">⇩</div>
+                    <div>
+                        <h2>Backups</h2>
+                        <p>Consulte e gerencie os backups do sistema.</p>
+                    </div><span class="button light">Ver backups →</span>
                 </a></section>
 
         </main>

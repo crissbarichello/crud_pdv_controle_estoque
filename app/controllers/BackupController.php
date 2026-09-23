@@ -46,7 +46,7 @@ class BackupController
 
             $_SESSION['erro'] =
                 'Não foi possível gerar o backup. '
-                . 'Verifique as configurações e os logs.';
+                . $erro->getMessage();
         }
 
         $this->redirecionar();

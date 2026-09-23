@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once "../config/conexao.php";
 
 $controller = $_GET['controller'] ?? $_GET['modulo'] ?? 'inicio';

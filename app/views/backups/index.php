@@ -45,10 +45,16 @@ $escape = static fn(mixed $value): string => htmlspecialchars(
 
             <?php if (!empty($mensagem)): ?>
                 <div class="notice"><?= $escape($mensagem) ?></div>
+                <script>
+                    alert(<?= json_encode($mensagem, JSON_UNESCAPED_UNICODE) ?>);
+                </script>
             <?php endif; ?>
 
             <?php if (!empty($erro)): ?>
                 <div class="notice error"><?= $escape($erro) ?></div>
+                <script>
+                    alert(<?= json_encode($erro, JSON_UNESCAPED_UNICODE) ?>);
+                </script>
             <?php endif; ?>
 
             <section class="panel">
